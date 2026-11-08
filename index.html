@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#2563eb" />
+  <meta name="description" content="MY LIFE OS – Trung tâm điều hành công việc và cuộc sống cá nhân." />
+  <title>MY LIFE OS – Trung tâm điều hành cá nhân</title>
+  <style>
+    :root {
+      --bg: #f5f7f5;
+      --surface: #ffffff;
+      --surface-2: #f0f4f1;
+      --surface-3: #e8efeb;
+      --ink: #26352f;
+      --muted: #738078;
+      --line: #e5ebe7;
+      --primary: #5d9c88;
+      --primary-dark: #397d69;
+      --primary-soft: #e5f1eb;
+      --blue: #e8f0f7;
+      --blue-ink: #557b9b;
+      --pink: #f8ebed;
+      --pink-ink: #a76c79;
+      --lavender: #efebf7;
+      --lavender-ink: #7e6b9d;
+      --cream: #f7f0e4;
+      --cream-ink: #9b8054;
+      --warning: #c18a43;
+      --warning-soft: #fbf2e4;
+      --danger: #bf6868;
+      --danger-soft: #faeceb;
+      --success: #4b9477;
+      --success-soft: #e8f4ed;
+      --shadow: 0 12px 30px rgba(43, 67, 55, .06);
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, "Be Vietnam Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.5; }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(93,156,136,.24); outline-offset: 2px; }
+    .app-shell { min-height: 100vh; }
+    .sidebar { position: fixed; inset: 0 auto 0 0; width: 248px; padding: 24px 16px 18px; background: #fbfcfa; border-right: 1px solid var(--line); display: flex; flex-direction: column; z-index: 20; }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 2px 10px 26px; }
+    .brand-mark { width: 39px; height: 39px; border-radius: 13px; background: linear-gradient(145deg, #d9ece2, #e8edf7); display: grid; place-items: center; color: var(--primary-dark); font-size: 19px; font-weight: 800; }
+    .brand-name { font-size: 17px; font-weight: 800; letter-spacing: .04em; }
+    .brand-sub { color: var(--muted); font-size: 10px; margin-top: 1px; }
+    .nav-label { color: #9aa59e; text-transform: uppercase; letter-spacing: .1em; font-size: 10px; font-weight: 800; padding: 10px 11px 7px; }
+    .nav-list { display: grid; gap: 4px; }
+    .nav-item { border: 0; width: 100%; color: #66746c; background: transparent; border-radius: 11px; padding: 11px 12px; display: flex; align-items: center; gap: 12px; text-align: left; transition: .18s ease; font-weight: 600; }
+    .nav-item:hover { background: var(--surface-2); color: var(--ink); }
+    .nav-item.active { background: var(--primary-soft); color: var(--primary-dark); }
+    .nav-icon { width: 22px; text-align: center; font-size: 17px; }
+    .nav-count { margin-left: auto; color: var(--muted); background: var(--surface-3); padding: 1px 7px; border-radius: 20px; font-size: 10px; }
+    .sidebar-bottom { margin-top: auto; }
+    .local-note { background: var(--cream); color: #8d7651; border-radius: 13px; padding: 12px; font-size: 11px; line-height: 1.5; margin: 14px 2px 12px; }
+    .local-note strong { display: block; margin-bottom: 3px; font-size: 12px; }
+    .user-card { border-top: 1px solid var(--line); padding: 15px 7px 0; display: flex; align-items: center; gap: 10px; }
+    .avatar { width: 34px; height: 34px; background: var(--pink); color: var(--pink-ink); border-radius: 50%; display: grid; place-items: center; font-weight: 800; }
+    .user-name { font-size: 12px; font-weight: 700; }
+    .user-role { font-size: 10px; color: var(--muted); }
+    .main { margin-left: 248px; min-height: 100vh; }
+    .topbar { height: 72px; padding: 0 34px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.72); backdrop-filter: blur(14px); position: sticky; top: 0; z-index: 15; }
+    .breadcrumbs { color: var(--muted); font-size: 12px; }
+    .breadcrumbs strong { color: var(--ink); font-weight: 700; }
+    .top-actions { display: flex; align-items: center; gap: 9px; }
+    .icon-btn { height: 38px; width: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 11px; background: white; color: #65746b; }
+    .content { max-width: 1450px; margin: 0 auto; padding: 30px 34px 54px; }
+    .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+    .eyebrow { color: var(--primary-dark); font-weight: 800; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; margin-bottom: 6px; }
+    h1 { font-size: clamp(24px, 3vw, 30px); line-height: 1.2; margin: 0; letter-spacing: -.035em; }
+    h2 { font-size: 16px; margin: 0; letter-spacing: -.015em; }
+    h3 { font-size: 14px; margin: 0; }
+    p { margin: 0; }
+    .subhead { color: var(--muted); margin-top: 7px; font-size: 13px; }
+    .btn { border: 1px solid transparent; background: var(--primary); color: white; padding: 10px 15px; border-radius: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: .18s ease; }
+    .btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn.secondary { background: white; color: #5e6d64; border-color: var(--line); }
+    .btn.secondary:hover { background: var(--surface-2); }
+    .btn.soft { background: var(--primary-soft); color: var(--primary-dark); }
+    .btn.danger { background: var(--danger-soft); color: var(--danger); }
+    .btn.small { padding: 7px 10px; font-size: 12px; border-radius: 9px; }
+    .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    .grid { display: grid; gap: 16px; }
+    .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 18px; }
+    .stat-card, .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 2px 8px rgba(43,67,55,.02); }
+    .stat-card { padding: 17px 18px; display: flex; gap: 13px; align-items: center; }
+    .stat-icon { width: 43px; height: 43px; border-radius: 14px; display: grid; place-items: center; font-size: 19px; flex-shrink: 0; }
+    .tone-green { background: var(--primary-soft); color: var(--primary-dark); }
+    .tone-blue { background: var(--blue); color: var(--blue-ink); }
+    .tone-pink { background: var(--pink); color: var(--pink-ink); }
+    .tone-lavender { background: var(--lavender); color: var(--lavender-ink); }
+    .tone-cream { background: var(--cream); color: var(--cream-ink); }
+    .stat-value { font-size: 24px; font-weight: 800; letter-spacing: -.04em; line-height: 1.05; }
+    .stat-label { color: var(--muted); font-size: 11px; margin-top: 5px; }
+    .dashboard-grid { grid-template-columns: minmax(0, 1.35fr) minmax(280px, .85fr); align-items: start; }
+    .card { padding: 19px; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .card-sub { color: var(--muted); font-size: 11px; margin-top: 4px; }
+    .text-btn { color: var(--primary-dark); border: 0; background: none; padding: 4px; font-weight: 700; font-size: 11px; }
+    .task-list { display: grid; gap: 9px; }
+    .task-row { border: 1px solid var(--line); border-radius: 13px; padding: 12px; display: flex; gap: 11px; align-items: flex-start; transition: .15s ease; }
+    .task-row:hover { border-color: #ccddd4; background: #fcfefd; }
+    .check-btn { flex: 0 0 20px; width: 20px; height: 20px; border: 1.5px solid #c9d5ce; border-radius: 7px; background: white; color: white; padding: 0; margin-top: 1px; }
+    .check-btn.checked { background: var(--primary); border-color: var(--primary); }
+    .task-main { min-width: 0; flex: 1; }
+    .task-title { font-size: 12px; font-weight: 700; overflow-wrap: anywhere; }
+    .task-title.done { text-decoration: line-through; color: #98a49d; }
+    .task-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; align-items: center; color: var(--muted); font-size: 10px; }
+    .task-actions { display: flex; gap: 4px; }
+    .mini-action { background: transparent; border: 0; color: #94a097; padding: 3px 5px; border-radius: 7px; }
+    .mini-action:hover { background: var(--surface-2); color: var(--ink); }
+    .pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 7px; border-radius: 20px; font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .pill.green { background: var(--success-soft); color: var(--success); }
+    .pill.blue { background: var(--blue); color: var(--blue-ink); }
+    .pill.pink { background: var(--pink); color: var(--pink-ink); }
+    .pill.orange { background: var(--warning-soft); color: var(--warning); }
+    .pill.gray { background: var(--surface-2); color: #718077; }
+    .pill.red { background: var(--danger-soft); color: var(--danger); }
+    .schedule-list { display: grid; gap: 12px; }
+    .schedule-item { display: grid; grid-template-columns: 48px 3px 1fr; gap: 10px; align-items: stretch; }
+    .schedule-time { color: var(--muted); font-size: 10px; padding-top: 3px; font-weight: 700; }
+    .schedule-line { background: #d7e8df; border-radius: 6px; }
+    .schedule-info { padding: 1px 0 5px; }
+    .schedule-title { font-weight: 700; font-size: 12px; }
+    .schedule-type { color: var(--muted); font-size: 10px; margin-top: 3px; }
+    .assistant-card { background: linear-gradient(135deg, #edf5ef, #f2f0f8); border: 1px solid #e5ece7; border-radius: var(--radius); padding: 19px; }
+    .assistant-title { display: flex; gap: 9px; align-items: center; font-weight: 800; margin-bottom: 8px; }
+    .assistant-copy { color: #617068; font-size: 12px; line-height: 1.65; }
+    .assistant-list { margin: 11px 0 0; padding-left: 18px; color: #52645a; font-size: 11px; display: grid; gap: 6px; }
+    .area-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 18px; }
+    .area-card { padding: 14px; border-radius: 14px; background: white; border: 1px solid var(--line); }
+    .area-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .area-name { font-weight: 700; font-size: 11px; margin-top: 11px; }
+    .area-count { font-size: 10px; color: var(--muted); margin-top: 3px; }
+    .progress { height: 6px; background: var(--surface-3); border-radius: 20px; overflow: hidden; margin-top: 10px; }
+    .progress > span { display: block; height: 100%; border-radius: inherit; background: var(--primary); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; margin-bottom: 16px; }
+    .field, .select, .textarea { background: white; border: 1px solid var(--line); border-radius: 10px; padding: 10px 11px; color: var(--ink); width: 100%; min-width: 0; }
+    .field::placeholder, .textarea::placeholder { color: #a1aba5; }
+    .field.compact, .select.compact { width: auto; min-width: 140px; padding: 8px 10px; font-size: 12px; }
+    .search-field { flex: 1; min-width: 190px; }
+    .filter-select { min-width: 135px; }
+    .board { display: grid; grid-template-columns: repeat(4, minmax(210px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 6px; }
+    .board-column { background: #eef2ef; border-radius: 15px; padding: 12px; min-height: 230px; }
+    .board-col-head { display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800; margin-bottom: 11px; }
+    .board-card { background: white; border: 1px solid var(--line); border-radius: 11px; padding: 11px; margin-bottom: 8px; cursor: pointer; }
+    .board-card:hover { border-color: #c7dacf; }
+    .project-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .project-card { padding: 18px; cursor: pointer; transition: .18s ease; }
+    .project-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .project-symbol { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 13px; font-size: 18px; margin-bottom: 13px; }
+    .project-title { font-weight: 800; font-size: 14px; }
+    .project-description { color: var(--muted); font-size: 11px; margin-top: 5px; min-height: 31px; }
+    .project-footer { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 10px; margin-top: 12px; }
+    .calendar-card { padding: 18px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    .calendar-weekday { color: var(--muted); text-align: center; font-size: 10px; font-weight: 800; padding: 8px 0; }
+    .calendar-day { min-height: 90px; border: 1px solid var(--line); border-radius: 10px; background: white; padding: 7px; text-align: left; overflow: hidden; }
+    .calendar-day.muted { background: #f8faf8; color: #b4beb7; }
+    .calendar-day.today { border-color: var(--primary); background: #f3faf6; }
+    .calendar-day.selected { box-shadow: inset 0 0 0 1px var(--primary); }
+    .day-number { font-size: 11px; font-weight: 800; }
+    .calendar-chip { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 5px; padding: 3px 5px; border-radius: 5px; background: var(--blue); color: var(--blue-ink); font-size: 9px; }
+    .calendar-chip.event { background: var(--lavender); color: var(--lavender-ink); }
+    .planner-grid { display: grid; grid-template-columns: repeat(7, minmax(150px, 1fr)); gap: 9px; overflow-x: auto; }
+    .planner-day { background: #eef2ef; border-radius: 14px; padding: 11px; min-height: 190px; }
+    .planner-day.today { background: #e9f3ed; }
+    .planner-date { font-size: 11px; font-weight: 800; margin-bottom: 10px; }
+    .planner-task { background: white; border: 1px solid var(--line); border-radius: 9px; padding: 9px; font-size: 10px; margin-bottom: 7px; cursor: pointer; }
+    .empty { text-align: center; padding: 30px 16px; color: var(--muted); }
+    .empty-icon { font-size: 27px; margin-bottom: 7px; }
+    .empty strong { display: block; color: #58675e; font-size: 12px; margin-bottom: 4px; }
+    .two-col { grid-template-columns: minmax(0, 1.15fr) minmax(270px, .85fr); align-items: start; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { display: grid; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 11px; font-weight: 800; color: #66746b; }
+    .help { color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .textarea { min-height: 100px; resize: vertical; }
+    .ai-panel { background: linear-gradient(135deg, #f0f4f8, #f5eff7); border: 1px solid #e8eaf0; border-radius: var(--radius); padding: 20px; }
+    .step-number { width: 25px; height: 25px; border-radius: 50%; display: grid; place-items: center; background: white; color: var(--lavender-ink); font-weight: 800; font-size: 11px; flex-shrink: 0; }
+    .ai-step { display: flex; gap: 10px; align-items: flex-start; margin-top: 13px; }
+    .ai-step p { color: #65716a; font-size: 11px; margin-top: 3px; }
+    .proposal-item { background: white; border: 1px solid var(--line); padding: 10px; border-radius: 10px; margin-top: 8px; font-size: 11px; }
+    .settings-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+    .notice { background: var(--warning-soft); color: #8e703e; border: 1px solid #f0e5d0; border-radius: 12px; padding: 12px 14px; font-size: 11px; line-height: 1.6; }
+    .danger-zone { border-color: #f0dddd; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(31,46,38,.34); z-index: 50; display: none; align-items: center; justify-content: center; padding: 18px; }
+    .modal-backdrop.show { display: flex; }
+    .modal { width: min(620px, 100%); max-height: min(90vh, 850px); overflow-y: auto; background: white; border-radius: 20px; box-shadow: 0 24px 80px rgba(28,47,37,.2); padding: 22px; }
+    .modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+    .modal-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; background: #2e5142; color: white; padding: 12px 16px; border-radius: 11px; box-shadow: var(--shadow); z-index: 100; opacity: 0; transform: translateY(10px); pointer-events: none; transition: .25s ease; font-size: 12px; max-width: min(360px, calc(100vw - 40px)); }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .mobile-nav { display: none; }
+    .hidden { display: none !important; }
+    .muted { color: var(--muted); }
+    .divider { height: 1px; background: var(--line); margin: 15px 0; }
+    .inline-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+    @media (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .area-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .project-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 760px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding-bottom: 76px; }
+      .topbar { height: 58px; padding: 0 16px; }
+      .content { padding: 22px 15px 35px; }
+      .page-head { align-items: center; }
+      .page-head .btn { padding: 9px 11px; font-size: 11px; }
+      .dashboard-grid, .two-col, .settings-grid { grid-template-columns: 1fr; }
+      .stats-grid { gap: 9px; }
+      .stat-card { padding: 13px; gap: 9px; }
+      .stat-icon { width: 36px; height: 36px; border-radius: 11px; }
+      .stat-value { font-size: 21px; }
+      .area-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+      .project-grid { grid-template-columns: 1fr; }
+      .mobile-nav { position: fixed; inset: auto 0 0; height: 68px; background: rgba(255,255,255,.96); border-top: 1px solid var(--line); display: flex; justify-content: space-around; align-items: center; padding: 4px 5px calc(4px + env(safe-area-inset-bottom)); z-index: 30; backdrop-filter: blur(14px); }
+      .mobile-nav button { min-width: 54px; border: 0; background: none; color: #89958d; display: grid; justify-items: center; gap: 2px; font-size: 9px; padding: 4px; }
+      .mobile-nav button.active { color: var(--primary-dark); font-weight: 800; }
+      .mobile-nav .mobile-plus { width: 42px; height: 42px; border-radius: 14px; background: var(--primary); color: white; font-size: 21px; display: grid; place-items: center; }
+      .calendar-day { min-height: 65px; padding: 5px; }
+      .calendar-chip { font-size: 8px; padding: 2px 3px; }
+      .calendar-grid { gap: 3px; }
+      .calendar-weekday { font-size: 9px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: auto; }
+      .topbar .breadcrumbs { font-size: 11px; }
+      .top-actions .desktop-only { display: none; }
+      .modal { padding: 18px; }
+    }
+    @media (max-width: 390px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-card { align-items: flex-start; }
+      .stat-icon { display: none; }
+      .page-head h1 { font-size: 23px; }
+    }
+  
+
+    /* MY LIFE OS – Bảng màu tươi, đậm: xanh dương / đỏ / vàng */
+    :root {
+      --bg: #f2f6ff;
+      --surface: #ffffff;
+      --surface-2: #eaf0ff;
+      --surface-3: #dce7ff;
+      --ink: #14284a;
+      --muted: #5e7191;
+      --line: #d2def4;
+
+      /* Xanh dương chủ đạo */
+      --primary: #155eef;
+      --primary-dark: #1047bd;
+      --primary-soft: #e0eaff;
+      --blue: #dce8ff;
+      --blue-ink: #0c46b5;
+
+      /* Đỏ tươi cho cảnh báo và việc gấp */
+      --pink: #ffe0e3;
+      --pink-ink: #bd1f35;
+      --danger: #df2638;
+      --danger-soft: #ffe1e4;
+
+      /* Vàng rực cho nhắc nhở và điểm nhấn */
+      --lavender: #e8edff;
+      --lavender-ink: #314fa5;
+      --cream: #ffdf55;
+      --cream-ink: #624900;
+      --warning: #a96300;
+      --warning-soft: #fff0a6;
+
+      --success: #16845c;
+      --success-soft: #def6e9;
+      --shadow: 0 12px 30px rgba(25, 72, 160, .11);
+    }
+
+    body { background: var(--bg); color: var(--ink); }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(21,94,239,.30);
+      outline-offset: 2px;
+    }
+    .sidebar { background: #ffffff; border-right-color: #d5e1f7; }
+    .brand-mark {
+      background: linear-gradient(135deg, #155eef 0%, #2878ff 58%, #ffca28 59%, #ffca28 100%);
+      color: #ffffff;
+      box-shadow: 0 5px 13px rgba(21,94,239,.22);
+    }
+    .brand-name { color: #123d91; }
+    .brand-sub { color: #667da5; }
+    .nav-label { color: #6b83ad; }
+    .nav-item { color: #415878; }
+    .nav-item.active {
+      background: #dfeaff;
+      color: #1047bd;
+      box-shadow: inset 3px 0 0 #155eef;
+    }
+    .nav-item:hover { background: #edf3ff; color: #123f9c; }
+    .nav-count { background: #dce8ff; color: #1047bd; }
+    .local-note {
+      background: #fff0a6;
+      color: #694d00;
+      border: 1px solid #ffdc43;
+    }
+    .avatar { background: #ffe0e3; color: #bd1f35; }
+    .topbar { background: rgba(255,255,255,.94); border-bottom-color: #d5e1f7; }
+    .breadcrumbs strong { color: #123d91; }
+    .icon-btn { color: #38577f; }
+    .icon-btn:hover { background: #eaf0ff; border-color: #b9cdf6; color: #1047bd; }
+    .eyebrow, .text-btn { color: #1047bd; }
+    .btn { background: #155eef; box-shadow: 0 4px 10px rgba(21,94,239,.16); }
+    .btn:hover { background: #1047bd; }
+    .btn.secondary { color: #355276; }
+    .btn.soft { background: #dfeaff; color: #1047bd; }
+    .btn.danger { background: #df2638; color: #ffffff; }
+    .btn.danger:hover { background: #b91d2d; }
+
+    .tone-green { background: #def6e9; color: #08734d; }
+    .tone-blue { background: #dce8ff; color: #0c46b5; }
+    .tone-pink { background: #ffe0e3; color: #bd1f35; }
+    .tone-lavender { background: #e8edff; color: #314fa5; }
+    .tone-cream { background: #ffdf55; color: #624900; }
+
+    .task-row:hover { border-color: #91b4ff; background: #f8faff; }
+    .check-btn { border-color: #9ab5e5; }
+    .check-btn.checked { background: #155eef; border-color: #155eef; }
+    .pill.green { background: #def6e9; color: #08734d; }
+    .pill.blue { background: #dce8ff; color: #0c46b5; }
+    .pill.pink, .pill.red { background: #ffe0e3; color: #bd1f35; }
+    .pill.orange { background: #fff0a6; color: #805400; }
+    .pill.gray { background: #edf1f8; color: #566982; }
+
+    .schedule-line { background: #9bbcff; }
+    .assistant-card {
+      background: linear-gradient(125deg, #dce8ff 0%, #edf3ff 58%, #fff0a6 100%);
+      border-color: #c8d9fb;
+    }
+    .assistant-title { color: #123d91; }
+    .assistant-copy { color: #385579; }
+    .assistant-list { color: #29476e; }
+    .progress { background: #dce7ff; }
+    .progress > span { background: linear-gradient(90deg, #155eef, #3987ff); }
+
+    .board-column, .planner-day { background: #eaf0ff; }
+    .board-card:hover { border-color: #91b4ff; }
+    .planner-day.today { background: #dce8ff; box-shadow: inset 0 3px 0 #155eef; }
+    .calendar-day.today { border-color: #155eef; background: #edf3ff; }
+    .calendar-day.selected { box-shadow: inset 0 0 0 2px #155eef; }
+    .calendar-chip { background: #dce8ff; color: #0c46b5; }
+    .calendar-chip.event { background: #ffdf55; color: #624900; }
+
+    .ai-panel {
+      background: linear-gradient(135deg, #e0eaff 0%, #f0f5ff 58%, #fff0a6 100%);
+      border-color: #cbdafa;
+    }
+    .step-number { background: #155eef; color: #ffffff; }
+    .notice { background: #fff0a6; color: #694d00; border-color: #ffdc43; }
+    .danger-zone { border-color: #f3b8c0; }
+    .modal-backdrop { background: rgba(13, 35, 78, .48); }
+    .modal { box-shadow: 0 24px 80px rgba(17, 48, 105, .25); }
+    .toast { background: #123d91; }
+    .mobile-nav { background: rgba(255,255,255,.98); border-top-color: #d5e1f7; }
+    .mobile-nav button.active { color: #1047bd; }
+    .mobile-nav .mobile-plus {
+      background: linear-gradient(145deg, #155eef, #1047bd);
+      box-shadow: 0 5px 12px rgba(21,94,239,.28);
+    }
+    .empty strong { color: #29476e; }
+    .field:focus, .select:focus, .textarea:focus { border-color: #5b91f5; }
+
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div><div class="brand-name">MY LIFE OS</div><div class="brand-sub">TRUNG TÂM ĐIỀU HÀNH CÁ NHÂN</div></div>
+      </div>
+      <div class="nav-label">Không gian làm việc</div>
+      <nav class="nav-list" id="sideNav">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span> Tổng quan</button>
+        <button class="nav-item" data-view="inbox"><span class="nav-icon">↳</span> Hộp thư công việc <span class="nav-count" id="inboxCount">0</span></button>
+        <button class="nav-item" data-view="tasks"><span class="nav-icon">☑</span> Nhiệm vụ <span class="nav-count" id="openCount">0</span></button>
+        <button class="nav-item" data-view="projects"><span class="nav-icon">▤</span> Dự án</button>
+        <button class="nav-item" data-view="calendar"><span class="nav-icon">▦</span> Lịch của tôi</button>
+        <button class="nav-item" data-view="planner"><span class="nav-icon">◷</span> Kế hoạch ngày / tuần</button>
+      </nav>
+      <div class="nav-label" style="margin-top:16px">Trợ lý</div>
+      <nav class="nav-list">
+        <button class="nav-item" data-view="ai"><span class="nav-icon">✧</span> Thư ký AI</button>
+        <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span> Cài đặt & dữ liệu</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-note"><strong>◉ Lưu trên thiết bị này</strong>Phiên bản đầu đang lưu dữ liệu trong trình duyệt. Chưa đồng bộ giữa các thiết bị.</div>
+        <div class="user-card"><div class="avatar" id="avatarInitial">B</div><div><div class="user-name" id="sidebarUser">Bạn</div><div class="user-role">Không gian cá nhân</div></div></div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumbs">MY LIFE OS <span style="color:#c1cbc4"> / </span> <strong id="topTitle">Tổng quan</strong></div>
+        <div class="top-actions">
+          <button class="icon-btn desktop-only" title="Tìm công việc" data-action="focus-search">⌕</button>
+          <button class="icon-btn" title="Thêm công việc" data-action="add-task">＋</button>
+          <button class="icon-btn" title="Cài đặt" data-view="settings">⚙</button>
+        </div>
+      </header>
+      <section class="content" id="pageContent"></section>
+    </main>
+    <nav class="mobile-nav" id="mobileNav">
+      <button class="active" data-view="dashboard"><span style="font-size:19px">▦</span>Trang chủ</button>
+      <button data-view="tasks"><span style="font-size:19px">☑</span>Công việc</button>
+      <button data-action="add-task"><span class="mobile-plus">＋</span></button>
+      <button data-view="calendar"><span style="font-size:19px">▦</span>Lịch</button>
+      <button data-view="ai"><span style="font-size:19px">✧</span>AI</button>
+    </nav>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal" id="modalContent"></div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    'use strict';
+    const STORAGE_KEY = 'my-life-os-v1';
+    const todayISO = () => {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    };
+    const uid = () => (crypto && crypto.randomUUID) ? crypto.randomUUID() : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const defaultAreas = [
+      {id:'school', name:'Công việc trường học', icon:'🏫', color:'blue'},
+      {id:'tutoring', name:'Dạy thêm', icon:'📚', color:'cream'},
+      {id:'professional', name:'Chuyên môn & dự án', icon:'🧪', color:'blue'},
+      {id:'family', name:'Gia đình & con cái', icon:'🏡', color:'pink'},
+      {id:'personal', name:'Bản thân', icon:'🌿', color:'cream'}
+    ];
+    const defaultState = () => ({
+      version: 1,
+      profile: {name:'Bạn', workStart:'08:00', workEnd:'21:00', dailyPriorityLimit:3},
+      areas: structuredCloneSafe(defaultAreas), tasks: [], projects: [], events: [], activity: [],
+      createdAt: new Date().toISOString()
+    });
+    function structuredCloneSafe(x) { return JSON.parse(JSON.stringify(x)); }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        if (!parsed || parsed.version !== 1) return defaultState();
+        parsed.profile ||= {name:'Bạn', workStart:'08:00', workEnd:'21:00', dailyPriorityLimit:3};
+        parsed.areas ||= structuredCloneSafe(defaultAreas);
+        parsed.tasks ||= []; parsed.projects ||= []; parsed.events ||= []; parsed.activity ||= [];
+        return parsed;
+      } catch (e) { console.warn('Không đọc được dữ liệu cũ:', e); return defaultState(); }
+    }
+    let state = loadState();
+    let currentView = 'dashboard';
+    let currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    let selectedCalendarDate = todayISO();
+    let taskFilter = {search:'', status:'all', area:'all', priority:'all', mode:'list'};
+    let aiPreview = null;
+    let toastTimer;
+
+    const $ = (selector, root=document) => root.querySelector(selector);
+    const $$ = (selector, root=document) => [...root.querySelectorAll(selector)];
+    const esc = (value='') => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const areaById = id => state.areas.find(a => a.id === id);
+    const projectById = id => state.projects.find(p => p.id === id);
+    const taskById = id => state.tasks.find(t => t.id === id);
+    const statusLabels = {inbox:'Hộp thư đến', unscheduled:'Chưa lên lịch', ready:'Sẵn sàng', in_progress:'Đang thực hiện', waiting:'Chờ phản hồi', blocked:'Bị tắc', completed:'Hoàn thành', cancelled:'Đã hủy'};
+    const statusColors = {inbox:'lavender', unscheduled:'gray', ready:'blue', in_progress:'green', waiting:'orange', blocked:'red', completed:'green', cancelled:'gray'};
+    const priorityLabels = {1:'P1 · Khẩn cấp', 2:'P2 · Quan trọng', 3:'P3 · Bình thường', 4:'P4 · Có thể để sau'};
+    const priorityColors = {1:'red', 2:'orange', 3:'blue', 4:'gray'};
+    const viewTitles = {dashboard:'Tổng quan', inbox:'Hộp thư công việc', tasks:'Nhiệm vụ', projects:'Dự án', calendar:'Lịch của tôi', planner:'Kế hoạch ngày / tuần', ai:'Thư ký AI', settings:'Cài đặt & dữ liệu'};
+    const formatDate = (date, options={day:'2-digit',month:'2-digit',year:'numeric'}) => {
+      if (!date) return 'Chưa đặt hạn';
+      const d = new Date(`${date}T12:00:00`);
+      return Number.isNaN(d.getTime()) ? date : new Intl.DateTimeFormat('vi-VN', options).format(d);
+    };
+    const isOverdue = task => task.dueDate && task.dueDate < todayISO() && !['completed','cancelled'].includes(task.status);
+    const isOpen = task => !['completed','cancelled'].includes(task.status);
+    const completedSteps = task => (task.steps || []).filter(s => s.done).length;
+    const taskProgress = task => (task.steps || []).length ? Math.round(completedSteps(task)/(task.steps || []).length*100) : (task.status==='completed'?100:0);
+    const projectProgress = project => {
+      const tasks = state.tasks.filter(t => t.projectId === project.id && t.status !== 'cancelled');
+      if (project.progressMode === 'manual' && Number.isFinite(Number(project.progress))) return Number(project.progress);
+      if (!tasks.length) return null;
+      return Math.round(tasks.reduce((sum,t)=>sum+(t.status==='completed'?100:taskProgress(t)),0)/tasks.length);
+    };
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        updateShellCounts();
+      } catch (e) {
+        showToast('Không thể lưu dữ liệu. Bộ nhớ trình duyệt có thể đã đầy.');
+        console.error(e);
+      }
+    }
+    function logActivity(action, description) {
+      state.activity.unshift({id:uid(), action, description, at:new Date().toISOString()});
+      state.activity = state.activity.slice(0,100);
+    }
+    function showToast(message) {
+      const el = $('#toast'); el.textContent = message; el.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
+    }
+    function updateShellCounts() {
+      $('#inboxCount').textContent = state.tasks.filter(t=>t.status==='inbox').length;
+      $('#openCount').textContent = state.tasks.filter(isOpen).length;
+      $('#sidebarUser').textContent = state.profile.name || 'Bạn';
+      $('#avatarInitial').textContent = (state.profile.name || 'B').trim().charAt(0).toUpperCase();
+    }
+    function setView(view) {
+      currentView = viewTitles[view] ? view : 'dashboard';
+      $$('.nav-item').forEach(el=>el.classList.toggle('active', el.dataset.view===currentView));
+      $$('.mobile-nav button').forEach(el=>el.classList.toggle('active', el.dataset.view===currentView));
+      $('#topTitle').textContent = viewTitles[currentView];
+      render();
+      window.scrollTo({top:0, behavior:'smooth'});
+    }
+    function emptyState(title, detail, actionLabel, action='add-task') {
+      return `<div class="empty"><div class="empty-icon">☁</div><strong>${esc(title)}</strong><div>${esc(detail)}</div>${actionLabel?`<div style="margin-top:13px"><button class="btn soft small" data-action="${action}">＋ ${esc(actionLabel)}</button></div>`:''}</div>`;
+    }
+    function taskPill(task) { return `<span class="pill ${statusColors[task.status]||'gray'}">${esc(statusLabels[task.status]||task.status)}</span>`; }
+    function priorityPill(task) { return `<span class="pill ${priorityColors[task.priority]||'gray'}">${esc(priorityLabels[task.priority]||'P3')}</span>`; }
+    function areaLabel(id) { const a=areaById(id); return a ? `${a.icon||'•'} ${a.name}` : 'Chưa phân loại'; }
+    function dueLabel(task) {
+      if (!task.dueDate) return 'Chưa đặt hạn';
+      return `${isOverdue(task)?'Quá hạn · ':''}${formatDate(task.dueDate,{day:'2-digit',month:'2-digit'})}`;
+    }
+    function taskRow(task, options={}) {
+      const done = task.status==='completed';
+      const project = projectById(task.projectId);
+      return `<div class="task-row" data-task-row="${esc(task.id)}">
+        <button class="check-btn ${done?'checked':''}" data-action="toggle-task" data-id="${esc(task.id)}" title="${done?'Đánh dấu chưa hoàn thành':'Đánh dấu hoàn thành'}">${done?'✓':''}</button>
+        <div class="task-main" style="cursor:pointer" data-action="edit-task" data-id="${esc(task.id)}">
+          <div class="task-title ${done?'done':''}">${esc(task.title)}</div>
+          <div class="task-meta"><span>${esc(areaLabel(task.areaId))}</span>${project?`<span>· ${esc(project.title)}</span>`:''}<span>· ${esc(dueLabel(task))}</span>${task.estimate?`<span>· ${Number(task.estimate)} phút</span>`:''}</div>
+          <div class="task-meta">${taskPill(task)} ${priorityPill(task)} ${isOverdue(task)?'<span class="pill red">Cần xử lý</span>':''}</div>
+        </div>
+        <div class="task-actions"><button class="mini-action" data-action="edit-task" data-id="${esc(task.id)}" title="Chỉnh sửa">✎</button>${options.delete!==false?`<button class="mini-action" data-action="delete-task" data-id="${esc(task.id)}" title="Xóa">×</button>`:''}</div>
+      </div>`;
+    }
+    function getTodayTasks() {
+      return state.tasks.filter(t=>isOpen(t) && (t.plannedDate===todayISO() || t.dueDate===todayISO()))
+        .sort((a,b)=>(a.priority||4)-(b.priority||4));
+    }
+    function renderDashboard() {
+      const open = state.tasks.filter(isOpen);
+      const overdue = open.filter(isOverdue);
+      const dueToday = open.filter(t=>t.dueDate===todayISO());
+      const activeProjects = state.projects.filter(p=>p.status==='active');
+      const focus = [...open].sort((a,b)=>{
+        const aScore=(a.priority||4)*10+(isOverdue(a)?-100:0)+(a.dueDate===todayISO()?-50:0);
+        const bScore=(b.priority||4)*10+(isOverdue(b)?-100:0)+(b.dueDate===todayISO()?-50:0);
+        return aScore-bScore;
+      }).slice(0,5);
+      const eventsToday = state.events.filter(e=>e.date===todayISO()).sort((a,b)=>(a.startTime||'').localeCompare(b.startTime||''));
+      const plannedToday = state.tasks.filter(t=>t.plannedDate===todayISO() && isOpen(t));
+      const schedule = [
+        ...eventsToday.map(e=>({time:e.startTime||'Cả ngày', title:e.title, type:'Sự kiện'})),
+        ...plannedToday.map(t=>({time:'Linh hoạt', title:t.title, type:'Công việc dự kiến'}))
+      ].sort((a,b)=>a.time.localeCompare(b.time));
+      const areaCards = state.areas.map(a=>{
+        const list=state.tasks.filter(t=>t.areaId===a.id && t.status!=='cancelled');
+        const done=list.filter(t=>t.status==='completed').length;
+        const pct=list.length?Math.round(done/list.length*100):0;
+        return `<div class="area-card"><div class="area-top"><span class="stat-icon tone-${esc(a.color||'green')}" style="width:32px;height:32px;font-size:15px">${esc(a.icon||'•')}</span><span class="muted" style="font-size:10px">${list.length} việc</span></div><div class="area-name">${esc(a.name)}</div><div class="area-count">${done} hoàn thành · ${pct}%</div><div class="progress"><span style="width:${pct}%"></span></div></div>`;
+      }).join('');
+      const greeting = new Date().getHours()<11?'Chào buổi sáng':new Date().getHours()<17?'Chào buổi chiều':'Chào buổi tối';
+      const assistant = overdue.length ? `Bạn đang có ${overdue.length} công việc quá hạn. Nên xem nguyên nhân trước khi nhận thêm việc mới.` : dueToday.length ? `Có ${dueToday.length} công việc đến hạn hôm nay. Hãy chọn một việc quan trọng để bắt đầu.` : open.length ? `Bạn có ${open.length} công việc đang mở. Hãy chọn tối đa 3 việc quan trọng để tập trung hôm nay.` : 'Chưa có công việc nào được ghi nhận. Bạn có thể bắt đầu bằng cách thêm một nhiệm vụ hoặc dự án.';
+      return `<div class="page-head"><div><div class="eyebrow">Không gian điều hành cá nhân</div><h1>${greeting}, ${esc(state.profile.name||'bạn')} 🌿</h1><p class="subhead">${formatDate(todayISO(),{weekday:'long',day:'numeric',month:'long',year:'numeric'})} · Đây là bức tranh công việc hiện tại của bạn.</p></div><button class="btn" data-action="add-task">＋ Thêm công việc</button></div>
+        <div class="grid stats-grid">
+          <div class="stat-card"><div class="stat-icon tone-green">☑</div><div><div class="stat-value">${open.length}</div><div class="stat-label">Công việc đang mở</div></div></div>
+          <div class="stat-card"><div class="stat-icon tone-pink">!</div><div><div class="stat-value">${overdue.length}</div><div class="stat-label">Công việc quá hạn</div></div></div>
+          <div class="stat-card"><div class="stat-icon tone-blue">◷</div><div><div class="stat-value">${dueToday.length}</div><div class="stat-label">Đến hạn hôm nay</div></div></div>
+          <div class="stat-card"><div class="stat-icon tone-lavender">▤</div><div><div class="stat-value">${activeProjects.length}</div><div class="stat-label">Dự án đang thực hiện</div></div></div>
+        </div>
+        <div class="grid dashboard-grid">
+          <section class="card"><div class="card-head"><div><h2>Việc cần chú ý</h2><div class="card-sub">Ưu tiên theo hạn và mức độ quan trọng</div></div><button class="text-btn" data-view="tasks">Xem tất cả →</button></div>
+            <div class="task-list">${focus.length?focus.map(t=>taskRow(t,{delete:false})).join(''):emptyState('Chưa có công việc','Thêm một nhiệm vụ để bắt đầu quản lý tiến độ.','Thêm công việc')}</div>
+          </section>
+          <div class="grid" style="gap:16px">
+            <section class="card"><div class="card-head"><div><h2>Lịch hôm nay</h2><div class="card-sub">Sự kiện và việc đã lên lịch</div></div><button class="text-btn" data-view="calendar">Mở lịch →</button></div>
+              ${schedule.length?`<div class="schedule-list">${schedule.map(s=>`<div class="schedule-item"><div class="schedule-time">${esc(s.time)}</div><div class="schedule-line"></div><div class="schedule-info"><div class="schedule-title">${esc(s.title)}</div><div class="schedule-type">${esc(s.type)}</div></div></div>`).join('')}</div>`:emptyState('Lịch đang trống','Bạn chưa có lịch hoặc công việc được xếp cho hôm nay.','Thêm lịch','add-event')}
+            </section>
+            <section class="assistant-card"><div class="assistant-title"><span style="font-size:20px">✧</span> Thư ký AI đề xuất</div><p class="assistant-copy">${esc(assistant)}</p><ul class="assistant-list"><li>Kiểm tra các hạn gần nhất.</li><li>Chia việc lớn thành những bước nhỏ.</li><li>Giữ thời gian dự phòng cho việc phát sinh.</li></ul><div style="margin-top:14px"><button class="btn soft small" data-view="ai">Trao đổi với thư ký AI →</button></div></section>
+          </div>
+        </div>
+        <div class="card" style="margin-top:18px"><div class="card-head"><div><h2>Các lĩnh vực cuộc sống</h2><div class="card-sub">Tiến độ được tính từ nhiệm vụ đã ghi nhận</div></div></div><div class="grid area-grid">${areaCards||''}</div></div>
+        <div class="notice" style="margin-top:16px">ⓘ Đây là bản đầu tiên: dữ liệu đang lưu trong trình duyệt trên thiết bị này. Hãy dùng mục <b>Cài đặt & dữ liệu</b> để xuất bản sao lưu thường xuyên. Chưa nhập thông tin nhạy cảm cho đến khi kết nối kho dữ liệu trực tuyến.</div>`;
+    }
+    function renderTaskPage(inboxOnly=false) {
+      let list=state.tasks.filter(t=>inboxOnly?t.status==='inbox':true);
+      if (taskFilter.search) { const q=taskFilter.search.toLowerCase(); list=list.filter(t=>(t.title+' '+(t.description||'')+' '+(t.nextAction||'')).toLowerCase().includes(q)); }
+      if (!inboxOnly && taskFilter.status!=='all') list=list.filter(t=>t.status===taskFilter.status);
+      if (taskFilter.area!=='all') list=list.filter(t=>t.areaId===taskFilter.area);
+      if (taskFilter.priority!=='all') list=list.filter(t=>String(t.priority)===taskFilter.priority);
+      list.sort((a,b)=>{
+        if (isOverdue(a)!==isOverdue(b)) return isOverdue(a)?-1:1;
+        if ((a.dueDate||'9999').localeCompare(b.dueDate||'9999')!==0) return (a.dueDate||'9999').localeCompare(b.dueDate||'9999');
+        return (a.priority||4)-(b.priority||4);
+      });
+      const filters=`<div class="toolbar"><input class="field compact search-field" id="taskSearch" placeholder="⌕ Tìm công việc..." value="${esc(taskFilter.search)}"><select class="select compact filter-select" id="statusFilter"><option value="all">Tất cả trạng thái</option>${Object.entries(statusLabels).map(([k,v])=>`<option value="${k}" ${taskFilter.status===k?'selected':''}>${v}</option>`).join('')}</select><select class="select compact filter-select" id="areaFilter"><option value="all">Tất cả lĩnh vực</option>${state.areas.map(a=>`<option value="${esc(a.id)}" ${taskFilter.area===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select><select class="select compact filter-select" id="priorityFilter"><option value="all">Mọi ưu tiên</option>${Object.entries(priorityLabels).map(([k,v])=>`<option value="${k}" ${taskFilter.priority===k?'selected':''}>${v}</option>`).join('')}</select>${inboxOnly?'':'<button class="btn secondary small" data-action="toggle-task-view">'+(taskFilter.mode==='list'?'▦ Xem Kanban':'☷ Xem danh sách')+'</button>'}</div>`;
+      let body='';
+      if (taskFilter.mode==='board'&&!inboxOnly) {
+        const columns=['ready','in_progress','waiting','completed'];
+        body=`<div class="board">${columns.map(status=>`<div class="board-column"><div class="board-col-head"><span>${statusLabels[status]}</span><span class="pill gray">${list.filter(t=>t.status===status).length}</span></div>${list.filter(t=>t.status===status).map(t=>`<div class="board-card" data-action="edit-task" data-id="${esc(t.id)}"><div style="font-weight:800;font-size:11px">${esc(t.title)}</div><div class="task-meta">${esc(areaById(t.areaId)?.name||'')} · ${esc(dueLabel(t))}</div><div style="margin-top:8px">${priorityPill(t)}</div></div>`).join('')||'<div class="muted" style="font-size:10px;padding:8px">Chưa có việc</div>'}</div>`).join('')}</div>`;
+      } else {
+        body=`<div class="task-list">${list.length?list.map(t=>taskRow(t)).join(''):emptyState(inboxOnly?'Hộp thư đang trống':'Không tìm thấy công việc','Thử thay đổi bộ lọc hoặc thêm một nhiệm vụ mới.', 'Thêm công việc')}</div>`;
+      }
+      return `<div class="page-head"><div><div class="eyebrow">${inboxOnly?'Tiếp nhận thông tin':'Theo dõi và thực hiện'}</div><h1>${inboxOnly?'Hộp thư công việc':'Nhiệm vụ'}</h1><p class="subhead">${inboxOnly?'Ghi nhận trước, phân loại và lên lịch sau.':'Mỗi công việc có trạng thái, hạn hoàn thành và hành động tiếp theo.'}</p></div><button class="btn" data-action="add-task">＋ Thêm công việc</button></div>
+        ${inboxOnly?`<div class="notice" style="margin-bottom:14px">Các việc mới được ghi nhận ở trạng thái <b>Hộp thư đến</b>. Khi đã xác định cách xử lý, bạn có thể chỉnh sửa và chuyển sang trạng thái phù hợp.</div>`:''}
+        <section class="card">${filters}${body}</section>`;
+    }
+    function renderProjects() {
+      const projects=state.projects;
+      return `<div class="page-head"><div><div class="eyebrow">Mục tiêu và kết quả</div><h1>Dự án</h1><p class="subhead">Chia mục tiêu lớn thành các công việc nhỏ và theo dõi tiến độ.</p></div><button class="btn" data-action="add-project">＋ Tạo dự án</button></div>
+        ${projects.length?`<div class="grid project-grid">${projects.map(p=>{
+          const pct=projectProgress(p), count=state.tasks.filter(t=>t.projectId===p.id&&t.status!=='cancelled').length;
+          const area=areaById(p.areaId);
+          return `<article class="card project-card" data-action="project-detail" data-id="${esc(p.id)}"><div class="project-symbol tone-${esc(area?.color||'green')}">${esc(area?.icon||'▤')}</div><div class="project-title">${esc(p.title)}</div><div class="project-description">${esc(p.description||'Chưa có mô tả')}</div><div class="progress"><span style="width:${pct??0}%"></span></div><div class="project-footer"><span>${count} công việc · ${pct===null?'Chưa có dữ liệu':pct+'%'}</span><span>${esc(p.dueDate?formatDate(p.dueDate,{day:'2-digit',month:'2-digit'}):'Chưa đặt hạn')}</span></div></article>`;
+        }).join('')}</div>`:emptyState('Chưa có dự án nào','Tạo dự án đầu tiên để gom các công việc có chung mục tiêu.','Tạo dự án','add-project')}`;
+    }
+    function renderCalendar() {
+      const year=currentMonth.getFullYear(), month=currentMonth.getMonth();
+      const first=new Date(year,month,1), startOffset=(first.getDay()+6)%7;
+      const gridStart=new Date(year,month,1-startOffset);
+      const days=Array.from({length:42},(_,i)=>new Date(gridStart.getFullYear(),gridStart.getMonth(),gridStart.getDate()+i));
+      const dayNames=['T2','T3','T4','T5','T6','T7','CN'];
+      const dayHTML=days.map(d=>{
+        const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const tasks=state.tasks.filter(t=>isOpen(t)&&(t.dueDate===iso||t.plannedDate===iso)).slice(0,2);
+        const events=state.events.filter(e=>e.date===iso).slice(0,1);
+        return `<button class="calendar-day ${d.getMonth()!==month?'muted':''} ${iso===todayISO()?'today':''} ${iso===selectedCalendarDate?'selected':''}" data-action="select-calendar-day" data-date="${iso}"><span class="day-number">${d.getDate()}</span>${tasks.map(t=>`<span class="calendar-chip" title="${esc(t.title)}">${esc(t.title)}</span>`).join('')}${events.map(e=>`<span class="calendar-chip event" title="${esc(e.title)}">${esc(e.title)}</span>`).join('')}</button>`;
+      }).join('');
+      const selectedTasks=state.tasks.filter(t=>isOpen(t)&&(t.dueDate===selectedCalendarDate||t.plannedDate===selectedCalendarDate));
+      const selectedEvents=state.events.filter(e=>e.date===selectedCalendarDate);
+      return `<div class="page-head"><div><div class="eyebrow">Thời gian và cam kết</div><h1>Lịch của tôi</h1><p class="subhead">Xem hạn công việc, lịch hẹn và những việc đã dự kiến thực hiện.</p></div><button class="btn" data-action="add-event">＋ Thêm sự kiện</button></div>
+        <div class="grid two-col"><section class="card calendar-card"><div class="card-head"><div><h2>${new Intl.DateTimeFormat('vi-VN',{month:'long',year:'numeric'}).format(currentMonth)}</h2><div class="card-sub">Chọn một ngày để xem chi tiết</div></div><div class="inline-actions"><button class="btn secondary small" data-action="calendar-prev">‹</button><button class="btn secondary small" data-action="calendar-today">Hôm nay</button><button class="btn secondary small" data-action="calendar-next">›</button></div></div><div class="calendar-grid">${dayNames.map(n=>`<div class="calendar-weekday">${n}</div>`).join('')}${dayHTML}</div></section>
+        <section class="card"><div class="card-head"><div><h2>${formatDate(selectedCalendarDate,{weekday:'long',day:'numeric',month:'long'})}</h2><div class="card-sub">Nội dung trong ngày đã chọn</div></div><button class="text-btn" data-action="add-task-for-date" data-date="${selectedCalendarDate}">＋ Thêm việc</button></div>
+        ${selectedEvents.length?`<div style="font-weight:800;font-size:11px;margin-bottom:8px">Sự kiện</div>${selectedEvents.map(e=>`<div class="task-row"><div class="stat-icon tone-lavender" style="width:32px;height:32px;font-size:13px">◷</div><div class="task-main"><div class="task-title">${esc(e.title)}</div><div class="task-meta">${esc(e.startTime||'Cả ngày')}${e.endTime?' – '+esc(e.endTime):''} · Sự kiện</div></div><button class="mini-action" data-action="delete-event" data-id="${esc(e.id)}">×</button></div>`).join('')}`:''}
+        ${selectedTasks.length?`<div style="font-weight:800;font-size:11px;margin:13px 0 8px">Công việc</div><div class="task-list">${selectedTasks.map(t=>taskRow(t,{delete:false})).join('')}</div>`:''}
+        ${!selectedEvents.length&&!selectedTasks.length?emptyState('Chưa có nội dung','Bạn có thể thêm sự kiện hoặc lên lịch cho công việc.','Thêm sự kiện','add-event'):''}
+        </section></div>`;
+    }
+    function weekDates() {
+      const now=new Date(); const monday=new Date(now); monday.setDate(now.getDate()-((now.getDay()+6)%7));
+      return Array.from({length:7},(_,i)=>new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+i));
+    }
+    function renderPlanner() {
+      const dates=weekDates();
+      const plannerDays=dates.map(d=>{
+        const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        const tasks=state.tasks.filter(t=>t.plannedDate===iso&&isOpen(t));
+        const ev=state.events.filter(e=>e.date===iso);
+        return `<div class="planner-day ${iso===todayISO()?'today':''}"><div class="planner-date">${new Intl.DateTimeFormat('vi-VN',{weekday:'short',day:'2-digit',month:'2-digit'}).format(d)} ${iso===todayISO()?'<span class="pill green">Hôm nay</span>':''}</div>${ev.map(e=>`<div class="planner-task" style="background:#f2eef8">◷ ${esc(e.title)}<div class="muted">${esc(e.startTime||'Cả ngày')}</div></div>`).join('')}${tasks.map(t=>`<div class="planner-task" data-action="edit-task" data-id="${esc(t.id)}"><strong>${esc(t.title)}</strong><div style="margin-top:5px">${priorityPill(t)}</div></div>`).join('')||(!ev.length?'<div class="muted" style="font-size:10px">Chưa xếp việc</div>':'')}<button class="text-btn" style="margin-top:5px" data-action="add-task-for-date" data-date="${iso}">＋ Thêm việc</button></div>`;
+      }).join('');
+      const unscheduled=state.tasks.filter(t=>isOpen(t)&&!t.plannedDate).sort((a,b)=>(a.priority||4)-(b.priority||4)).slice(0,8);
+      return `<div class="page-head"><div><div class="eyebrow">Chủ động sử dụng thời gian</div><h1>Kế hoạch tuần</h1><p class="subhead">Phân bổ công việc vào từng ngày, đồng thời giữ khoảng trống cho việc phát sinh.</p></div><button class="btn soft" data-view="ai">✧ Nhờ AI đề xuất</button></div>
+        <section class="card"><div class="card-head"><div><h2>Tuần hiện tại</h2><div class="card-sub">${formatDate(`${dates[0].getFullYear()}-${String(dates[0].getMonth()+1).padStart(2,'0')}-${String(dates[0].getDate()).padStart(2,'0')}`,{day:'2-digit',month:'2-digit'})} – ${formatDate(`${dates[6].getFullYear()}-${String(dates[6].getMonth()+1).padStart(2,'0')}-${String(dates[6].getDate()).padStart(2,'0')}`,{day:'2-digit',month:'2-digit',year:'numeric'})}</div></div><span class="pill blue">Kế hoạch linh hoạt</span></div><div class="planner-grid">${plannerDays}</div></section>
+        <section class="card" style="margin-top:16px"><div class="card-head"><div><h2>Công việc chưa xếp lịch</h2><div class="card-sub">Những việc chưa có ngày dự kiến thực hiện</div></div><button class="text-btn" data-view="tasks">Mở danh sách →</button></div><div class="task-list">${unscheduled.length?unscheduled.map(t=>taskRow(t,{delete:false})).join(''):emptyState('Không còn việc chưa xếp lịch','Các công việc đang mở đã có ngày dự kiến hoặc đã hoàn thành.','','')}</div></section>`;
+    }
+    function buildAIPrompt(mode='week') {
+      const open=state.tasks.filter(isOpen).slice(0,60);
+      const events=state.events.filter(e=>e.date>=todayISO()).slice(0,35);
+      const projects=state.projects.filter(p=>p.status==='active').map(p=>({id:p.id,title:p.title,due_date:p.dueDate||null,progress:projectProgress(p)}));
+      const context={today:todayISO(),timezone:'Asia/Ho_Chi_Minh',planning_mode:mode,profile:state.profile,areas:state.areas.map(a=>({id:a.id,name:a.name})),tasks:open.map(t=>({id:t.id,title:t.title,area:areaById(t.areaId)?.name||'',project:projectById(t.projectId)?.title||'',status:t.status,priority:t.priority,due_date:t.dueDate||null,planned_date:t.plannedDate||null,estimate_minutes:t.estimate||null,next_action:t.nextAction||'',blocked_reason:t.blockedReason||''})),events,projects};
+      return `Bạn là thư ký điều hành cá nhân. Hãy lập kế hoạch dựa trên dữ liệu thật bên dưới. Không tự tạo nhiệm vụ, lịch cố định, thời hạn hoặc thông tin không có trong dữ liệu. Nếu thiếu thời lượng, hãy ghi rõ giả định. Giữ lịch cố định, ưu tiên việc quan trọng và gần hạn, không xếp kín toàn bộ thời gian. Chỉ đề xuất ngày dự kiến thực hiện, không thay đổi deadline.
+
+YÊU CẦU: ${mode==='day'?'Lập kế hoạch cho hôm nay và nêu tối đa 3 ưu tiên chính.':'Lập kế hoạch cho 7 ngày hiện tại, phân bổ công việc hợp lý.'}
+
+Hãy trả lời bằng đúng một JSON hợp lệ, không dùng markdown, theo cấu trúc:
+{
+  "summary": "Tóm tắt ngắn",
+  "recommendations": ["Đề xuất 1", "Đề xuất 2"],
+  "plan": [
+    {"task_id": "ID công việc có trong dữ liệu", "planned_date": "YYYY-MM-DD", "minutes": 45, "reason": "Lý do xếp lịch"}
+  ]
+}
+Chỉ dùng task_id nằm trong dữ liệu đầu vào. Không đưa nhiệm vụ đã hoàn thành vào plan. Không chỉnh sửa deadline. Nếu không đủ cơ sở để xếp lịch, hãy để plan rỗng và giải thích trong recommendations.
+
+DỮ LIỆU MY LIFE OS:
+${JSON.stringify(context,null,2)}`;
+    }
+    function renderAI() {
+      return `<div class="page-head"><div><div class="eyebrow">Cầu nối ChatGPT</div><h1>Thư ký AI</h1><p class="subhead">Dùng ChatGPT bạn đang có để phân tích dữ liệu MY LIFE OS, không cần API trong phiên bản này.</p></div><span class="pill green">Không cần API</span></div>
+        <div class="grid two-col"><section class="ai-panel"><div class="assistant-title"><span style="font-size:21px">✧</span> AI Bridge – Quy trình làm việc</div><p class="assistant-copy">Ứng dụng sẽ tạo câu lệnh kèm dữ liệu công việc. Bạn gửi nội dung đó cho ChatGPT, sau đó đưa kết quả có cấu trúc trở lại để xem trước và phê duyệt.</p>
+          <div class="ai-step"><div class="step-number">1</div><div><strong>Tạo yêu cầu phân tích</strong><p>Chọn kế hoạch ngày hoặc tuần. Dữ liệu chỉ lấy từ công việc đang mở và lịch đã nhập.</p></div></div>
+          <div class="ai-step"><div class="step-number">2</div><div><strong>Mở ChatGPT</strong><p>Sao chép câu lệnh, mở ChatGPT và dán vào cuộc trò chuyện.</p></div></div>
+          <div class="ai-step"><div class="step-number">3</div><div><strong>Nhập kết quả và xem trước</strong><p>Đưa JSON ChatGPT trả về vào ô bên cạnh để kiểm tra.</p></div></div>
+          <div class="ai-step"><div class="step-number">4</div><div><strong>Phê duyệt mới cập nhật</strong><p>Chỉ ngày dự kiến và thời lượng được cập nhật. Deadline gốc không bị thay đổi.</p></div></div>
+          <div class="divider"></div><div class="form-group"><label class="form-label" for="aiMode">Bạn muốn thư ký phân tích</label><select class="select" id="aiMode"><option value="week">Kế hoạch 7 ngày</option><option value="day">Kế hoạch hôm nay</option></select></div>
+          <div class="inline-actions" style="margin-top:12px"><button class="btn" data-action="generate-ai-prompt">Tạo câu lệnh phân tích</button><button class="btn secondary" data-action="open-chatgpt">Mở ChatGPT ↗</button></div>
+          <div class="form-group" style="margin-top:14px"><label class="form-label" for="aiPrompt">Câu lệnh và dữ liệu gửi ChatGPT</label><textarea class="textarea" id="aiPrompt" placeholder="Nhấn ‘Tạo câu lệnh phân tích’ để chuẩn bị nội dung..."></textarea><div class="inline-actions"><button class="btn secondary small" data-action="copy-ai-prompt">Sao chép câu lệnh</button><span class="help" id="promptStatus" style="align-self:center">Chưa tạo câu lệnh</span></div></div>
+        </section>
+        <section class="card"><div class="card-head"><div><h2>Nhập kết quả từ ChatGPT</h2><div class="card-sub">Dán JSON mà ChatGPT trả về</div></div><span class="pill orange">Chờ duyệt</span></div>
+          <div class="form-group"><label class="form-label" for="aiResult">Kết quả AI</label><textarea class="textarea" id="aiResult" style="min-height:210px" placeholder='Dán JSON có cấu trúc gồm "summary", "recommendations" và "plan"...'></textarea><p class="help">ChatGPT cần trả lời bằng JSON hợp lệ theo mẫu được yêu cầu. Có thể dán cả phần JSON trong khối mã.</p></div>
+          <button class="btn soft" style="margin-top:10px" data-action="preview-ai">Kiểm tra và xem trước</button>
+          <div id="aiPreviewArea" style="margin-top:15px">${aiPreview?renderAIPreview():`<div class="empty"><div class="empty-icon">✧</div><strong>Chưa có đề xuất nào</strong><div>Kết quả AI sẽ hiển thị tại đây để bạn kiểm tra trước khi áp dụng.</div></div>`}</div>
+        </section></div>
+        <div class="notice" style="margin-top:16px">Bảo mật: câu lệnh sẽ chứa tên công việc, hạn, ưu tiên và thông tin lịch được chọn. Không đưa mật khẩu, số điện thoại, thông tin nhạy cảm của học sinh hoặc dữ liệu riêng tư không cần thiết vào ngữ cảnh AI.</div>`;
+    }
+    function renderAIPreview() {
+      if (!aiPreview) return '';
+      const valid=aiPreview.plan.filter(p=>taskById(p.task_id));
+      return `<div class="assistant-card"><div class="assistant-title">✧ ${esc(aiPreview.summary||'Đề xuất từ ChatGPT')}</div>${(aiPreview.recommendations||[]).length?`<ul class="assistant-list">${aiPreview.recommendations.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}<div class="divider"></div><strong style="font-size:12px">Lịch dự kiến (${valid.length} việc)</strong>${valid.length?valid.map(p=>`<div class="proposal-item"><strong>${esc(taskById(p.task_id)?.title||'')}</strong><div class="task-meta">${formatDate(p.planned_date)} · ${Number(p.minutes)||'Chưa rõ'} phút</div><div class="muted" style="margin-top:4px">${esc(p.reason||'')}</div></div>`).join(''):'<p class="help" style="margin-top:8px">Không có nhiệm vụ hợp lệ để cập nhật lịch.</p>'}<div class="inline-actions" style="margin-top:14px"><button class="btn" data-action="apply-ai-plan" ${valid.length?'':'disabled'}>Phê duyệt và áp dụng</button><button class="btn secondary" data-action="discard-ai">Bỏ đề xuất</button></div></div>`;
+    }
+    function renderSettings() {
+      return `<div class="page-head"><div><div class="eyebrow">Cá nhân hóa và bảo vệ dữ liệu</div><h1>Cài đặt & dữ liệu</h1><p class="subhead">Quản lý thông tin cá nhân, sao lưu và khôi phục dữ liệu.</p></div></div>
+        <div class="grid settings-grid"><section class="card"><div class="card-head"><div><h2>Hồ sơ cá nhân</h2><div class="card-sub">Thông tin dùng trong lời chào và lập kế hoạch</div></div></div><form id="profileForm"><div class="form-grid"><div class="form-group full"><label class="form-label">Tên hiển thị</label><input class="field" name="name" value="${esc(state.profile.name||'Bạn')}" required></div><div class="form-group"><label class="form-label">Bắt đầu làm việc thường lệ</label><input class="field" type="time" name="workStart" value="${esc(state.profile.workStart||'08:00')}"></div><div class="form-group"><label class="form-label">Kết thúc làm việc thường lệ</label><input class="field" type="time" name="workEnd" value="${esc(state.profile.workEnd||'21:00')}"></div><div class="form-group full"><label class="form-label">Số việc ưu tiên tối đa mỗi ngày</label><select class="select" name="dailyPriorityLimit">${[1,2,3,4,5].map(n=>`<option value="${n}" ${Number(state.profile.dailyPriorityLimit)===n?'selected':''}>${n} việc</option>`).join('')}</select></div></div><div style="margin-top:14px"><button class="btn" type="submit">Lưu hồ sơ</button></div></form>
+        <div class="divider"></div><h3>Quản lý lĩnh vực</h3><p class="help" style="margin-top:5px">Các lĩnh vực mặc định có thể dùng ngay. Có thể bổ sung chỉnh sửa màu sắc ở phiên bản sau.</p><div class="task-list" style="margin-top:12px">${state.areas.map(a=>`<div class="task-row"><div class="stat-icon tone-${esc(a.color||'green')}" style="width:32px;height:32px;font-size:14px">${esc(a.icon||'•')}</div><div class="task-main"><div class="task-title">${esc(a.name)}</div><div class="task-meta">${state.tasks.filter(t=>t.areaId===a.id).length} công việc</div></div></div>`).join('')}</div>
+        </section>
+        <div class="grid" style="gap:16px"><section class="card"><div class="card-head"><div><h2>Sao lưu dữ liệu</h2><div class="card-sub">Tạo bản sao để lưu trên máy tính</div></div><span class="pill green">Khuyến nghị</span></div><p class="help">Xuất toàn bộ lĩnh vực, công việc, dự án, lịch và cài đặt thành một file JSON. Hãy lưu file ở nơi an toàn.</p><div class="inline-actions" style="margin-top:14px"><button class="btn" data-action="export-data">↓ Xuất bản sao lưu</button><button class="btn secondary" data-action="choose-import">↑ Khôi phục dữ liệu</button><input type="file" id="importFile" accept=".json,application/json" class="hidden"></div></section>
+        <section class="card"><div class="card-head"><div><h2>Thông tin lưu trữ</h2><div class="card-sub">Trạng thái phiên bản hiện tại</div></div></div><div class="notice">Dữ liệu hiện chỉ nằm trong bộ nhớ của trình duyệt trên thiết bị này. Xóa dữ liệu website hoặc đổi trình duyệt có thể làm mất dữ liệu nếu chưa sao lưu.</div><div class="task-meta" style="margin-top:12px">Số công việc: <b>${state.tasks.length}</b> · Dự án: <b>${state.projects.length}</b> · Sự kiện: <b>${state.events.length}</b></div></section>
+        <section class="card danger-zone"><div class="card-head"><div><h2>Khu vực nguy hiểm</h2><div class="card-sub">Chỉ sử dụng khi muốn xóa dữ liệu trên trình duyệt này</div></div></div><button class="btn danger small" data-action="reset-data">Xóa toàn bộ dữ liệu tại thiết bị này</button></section></div></div>`;
+    }
+    function render() {
+      let html='';
+      if (currentView==='dashboard') html=renderDashboard();
+      else if (currentView==='inbox') html=renderTaskPage(true);
+      else if (currentView==='tasks') html=renderTaskPage(false);
+      else if (currentView==='projects') html=renderProjects();
+      else if (currentView==='calendar') html=renderCalendar();
+      else if (currentView==='planner') html=renderPlanner();
+      else if (currentView==='ai') html=renderAI();
+      else if (currentView==='settings') html=renderSettings();
+      $('#pageContent').innerHTML=html;
+      $('#topTitle').textContent=viewTitles[currentView];
+      updateShellCounts();
+    }
+    function openModal(content) { $('#modalContent').innerHTML=content; $('#modalBackdrop').classList.add('show'); document.body.style.overflow='hidden'; }
+    function closeModal() { $('#modalBackdrop').classList.remove('show'); document.body.style.overflow=''; }
+    function taskForm(task=null, presetDate=null, presetProject=null) {
+      const t=task||{};
+      const isEdit=!!task;
+      openModal(`<div class="modal-head"><div><div class="eyebrow">${isEdit?'Cập nhật thông tin':'Ghi nhận nhiệm vụ'}</div><h2 id="modalTitle">${isEdit?'Chỉnh sửa công việc':'Thêm công việc mới'}</h2></div><button class="icon-btn" data-action="close-modal">×</button></div>
+        <form id="taskForm" data-id="${esc(t.id||'')}"><div class="form-grid"><div class="form-group full"><label class="form-label">Tên công việc *</label><input class="field" name="title" required maxlength="180" placeholder="Ví dụ: Hoàn thiện kế hoạch bài dạy Hóa 12" value="${esc(t.title||'')}"></div>
+        <div class="form-group full"><label class="form-label">Mô tả</label><textarea class="textarea" name="description" placeholder="Thông tin, yêu cầu hoặc kết quả cần đạt...">${esc(t.description||'')}</textarea></div>
+        <div class="form-group"><label class="form-label">Lĩnh vực</label><select class="select" name="areaId">${state.areas.map(a=>`<option value="${esc(a.id)}" ${t.areaId===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Dự án</label><select class="select" name="projectId"><option value="">Không thuộc dự án</option>${state.projects.filter(p=>p.status!=='completed'&&p.status!=='cancelled').map(p=>`<option value="${esc(p.id)}" ${t.projectId===p.id||(!t.id&&presetProject===p.id)?'selected':''}>${esc(p.title)}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Trạng thái</label><select class="select" name="status">${Object.entries(statusLabels).map(([k,v])=>`<option value="${k}" ${(t.status||'inbox')===k?'selected':''}>${v}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Mức độ ưu tiên</label><select class="select" name="priority">${Object.entries(priorityLabels).map(([k,v])=>`<option value="${k}" ${Number(t.priority||3)===Number(k)?'selected':''}>${v}</option>`).join('')}</select></div>
+        <div class="form-group"><label class="form-label">Hạn hoàn thành</label><input class="field" type="date" name="dueDate" value="${esc(t.dueDate||'')}"></div>
+        <div class="form-group"><label class="form-label">Ngày dự kiến thực hiện</label><input class="field" type="date" name="plannedDate" value="${esc(t.plannedDate||presetDate||'')}"></div>
+        <div class="form-group"><label class="form-label">Thời lượng dự kiến (phút)</label><input class="field" type="number" min="1" max="1440" name="estimate" value="${esc(t.estimate||'')}" placeholder="Ví dụ: 45"></div>
+        <div class="form-group"><label class="form-label">Hành động tiếp theo</label><input class="field" name="nextAction" maxlength="240" value="${esc(t.nextAction||'')}" placeholder="Việc cụ thể cần làm tiếp"></div>
+        <div class="form-group full"><label class="form-label">Lý do đang bị tắc / chờ đợi</label><input class="field" name="blockedReason" maxlength="240" value="${esc(t.blockedReason||'')}" placeholder="Ví dụ: Đang chờ tài liệu từ tổ chuyên môn"></div>
+        </div><div class="modal-foot"><button type="button" class="btn secondary" data-action="close-modal">Hủy</button><button type="submit" class="btn">${isEdit?'Lưu thay đổi':'Lưu công việc'}</button></div></form>`);
+    }
+    function projectForm(project=null) {
+      const p=project||{};
+      openModal(`<div class="modal-head"><div><div class="eyebrow">Mục tiêu và kết quả</div><h2 id="modalTitle">${project?'Chỉnh sửa dự án':'Tạo dự án mới'}</h2></div><button class="icon-btn" data-action="close-modal">×</button></div>
+        <form id="projectForm" data-id="${esc(p.id||'')}"><div class="form-grid"><div class="form-group full"><label class="form-label">Tên dự án *</label><input class="field" name="title" required maxlength="160" value="${esc(p.title||'')}" placeholder="Ví dụ: Xây dựng ngân hàng câu hỏi Hóa học"></div><div class="form-group full"><label class="form-label">Mô tả / kết quả cần đạt</label><textarea class="textarea" name="description">${esc(p.description||'')}</textarea></div><div class="form-group"><label class="form-label">Lĩnh vực</label><select class="select" name="areaId">${state.areas.map(a=>`<option value="${esc(a.id)}" ${p.areaId===a.id?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Trạng thái</label><select class="select" name="status">${[['active','Đang thực hiện'],['on_hold','Tạm dừng'],['completed','Hoàn thành'],['cancelled','Đã hủy'],['draft','Bản nháp']].map(([k,v])=>`<option value="${k}" ${(p.status||'active')===k?'selected':''}>${v}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Ngày bắt đầu</label><input class="field" name="startDate" type="date" value="${esc(p.startDate||todayISO())}"></div><div class="form-group"><label class="form-label">Hạn dự kiến</label><input class="field" name="dueDate" type="date" value="${esc(p.dueDate||'')}"></div></div><div class="modal-foot"><button type="button" class="btn secondary" data-action="close-modal">Hủy</button><button type="submit" class="btn">Lưu dự án</button></div></form>`);
+    }
+    function eventForm(date=todayISO()) {
+      openModal(`<div class="modal-head"><div><div class="eyebrow">Lịch cá nhân</div><h2 id="modalTitle">Thêm sự kiện</h2></div><button class="icon-btn" data-action="close-modal">×</button></div><form id="eventForm"><div class="form-grid"><div class="form-group full"><label class="form-label">Tên sự kiện *</label><input class="field" name="title" required maxlength="160" placeholder="Ví dụ: Họp phụ huynh"></div><div class="form-group"><label class="form-label">Ngày</label><input class="field" type="date" name="date" value="${esc(date)}" required></div><div class="form-group"><label class="form-label">Loại sự kiện</label><select class="select" name="type"><option value="fixed">Lịch cố định</option><option value="family">Gia đình</option><option value="personal">Cá nhân</option><option value="other">Khác</option></select></div><div class="form-group"><label class="form-label">Bắt đầu</label><input class="field" type="time" name="startTime"></div><div class="form-group"><label class="form-label">Kết thúc</label><input class="field" type="time" name="endTime"></div><div class="form-group full"><label class="form-label">Ghi chú</label><textarea class="textarea" name="description"></textarea></div></div><div class="modal-foot"><button type="button" class="btn secondary" data-action="close-modal">Hủy</button><button type="submit" class="btn">Lưu sự kiện</button></div></form>`);
+    }
+    function deleteTask(id) {
+      const t=taskById(id); if(!t) return;
+      if(!confirm(`Bạn có chắc muốn xóa công việc “${t.title}”?`)) return;
+      state.tasks=state.tasks.filter(x=>x.id!==id); logActivity('delete_task',`Đã xóa công việc: ${t.title}`); saveState(); render(); showToast('Đã xóa công việc.');
+    }
+    function toggleTask(id) {
+      const t=taskById(id); if(!t) return;
+      t.status=t.status==='completed'?'ready':'completed'; t.completedAt=t.status==='completed'?new Date().toISOString():null; t.updatedAt=new Date().toISOString();
+      logActivity('update_task',`${t.status==='completed'?'Hoàn thành':'Mở lại'} công việc: ${t.title}`); saveState(); render(); showToast(t.status==='completed'?'Đã đánh dấu hoàn thành.':'Đã mở lại công việc.');
+    }
+    function exportData() {
+      const payload={app:'MY LIFE OS',version:1,exportedAt:new Date().toISOString(),data:state};
+      const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+      const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`my-life-os-backup-${todayISO()}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); showToast('Đã tạo file sao lưu.');
+    }
+    function parseAIResult(raw) {
+      let text=raw.trim().replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');
+      const first=text.indexOf('{'), last=text.lastIndexOf('}');
+      if(first<0||last<first) throw new Error('Không tìm thấy JSON hợp lệ trong nội dung.');
+      const obj=JSON.parse(text.slice(first,last+1));
+      if(!Array.isArray(obj.plan)) throw new Error('JSON cần có thuộc tính plan dạng danh sách.');
+      const valid=[];
+      for(const item of obj.plan) {
+        const task=taskById(String(item.task_id||''));
+        if(!task || !isOpen(task)) continue;
+        if(!/^\d{4}-\d{2}-\d{2}$/.test(String(item.planned_date||''))) continue;
+        valid.push({task_id:task.id,planned_date:item.planned_date,minutes:Math.max(0,Number(item.minutes)||0),reason:String(item.reason||'')});
+      }
+      return {summary:String(obj.summary||'Đề xuất từ ChatGPT'),recommendations:Array.isArray(obj.recommendations)?obj.recommendations.map(String):[],plan:valid};
+    }
+    function applyAIPlan() {
+      if(!aiPreview) return;
+      let count=0;
+      aiPreview.plan.forEach(p=>{const t=taskById(p.task_id);if(!t||!isOpen(t))return;t.plannedDate=p.planned_date;if(p.minutes>0)t.estimate=p.minutes;t.updatedAt=new Date().toISOString();count++;});
+      logActivity('ai_plan_applied',`Đã phê duyệt kế hoạch AI cho ${count} công việc.`);saveState();aiPreview=null;render();showToast(`Đã áp dụng lịch dự kiến cho ${count} công việc.`);
+    }
+    function handleAction(action, el) {
+      const id=el.dataset.id;
+      switch(action) {
+        case 'add-task': taskForm(); break;
+        case 'add-task-for-date': taskForm(null,el.dataset.date); break;
+        case 'edit-task': {const t=taskById(id);if(t)taskForm(t);break;}
+        case 'delete-task': deleteTask(id); break;
+        case 'toggle-task': toggleTask(id); break;
+        case 'add-project': projectForm(); break;
+        case 'project-detail': {
+          const p=projectById(id);if(!p)break;
+          const list=state.tasks.filter(t=>t.projectId===id);
+          openModal(`<div class="modal-head"><div><div class="eyebrow">Chi tiết dự án</div><h2 id="modalTitle">${esc(p.title)}</h2></div><button class="icon-btn" data-action="close-modal">×</button></div><p class="muted" style="font-size:12px">${esc(p.description||'Chưa có mô tả')}</p><div class="task-meta" style="margin:12px 0">${esc(areaLabel(p.areaId))} · ${esc(p.dueDate?formatDate(p.dueDate):'Chưa đặt hạn')} · ${projectProgress(p)===null?'Chưa có tiến độ':projectProgress(p)+'%'}</div><div class="divider"></div><div class="card-head"><h3>Công việc trong dự án (${list.length})</h3><button class="btn small" data-action="add-task-project" data-id="${esc(id)}">＋ Thêm việc</button></div><div class="task-list">${list.length?list.map(t=>taskRow(t,{delete:false})).join(''):emptyState('Chưa có nhiệm vụ','Thêm việc đầu tiên cho dự án này.','','')}</div><div class="modal-foot"><button class="btn secondary" data-action="edit-project" data-id="${esc(id)}">Chỉnh sửa dự án</button><button class="btn secondary" data-action="close-modal">Đóng</button></div>`);break;
+        }
+        case 'add-task-project': closeModal(); taskForm(null,null,id); break;
+        case 'edit-project': {const p=projectById(id);if(p)projectForm(p);break;}
+        case 'add-event': eventForm(selectedCalendarDate||todayISO()); break;
+        case 'delete-event': if(confirm('Xóa sự kiện này?')){state.events=state.events.filter(e=>e.id!==id);saveState();render();showToast('Đã xóa sự kiện.');} break;
+        case 'close-modal': closeModal(); break;
+        case 'calendar-prev': currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()-1,1);render();break;
+        case 'calendar-next': currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()+1,1);render();break;
+        case 'calendar-today': currentMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);selectedCalendarDate=todayISO();render();break;
+        case 'select-calendar-day': selectedCalendarDate=el.dataset.date;render();break;
+        case 'toggle-task-view': taskFilter.mode=taskFilter.mode==='list'?'board':'list';render();break;
+        case 'generate-ai-prompt': {const mode=$('#aiMode')?.value||'week';$('#aiPrompt').value=buildAIPrompt(mode);$('#promptStatus').textContent='Đã tạo dữ liệu ngữ cảnh';showToast('Đã tạo câu lệnh phân tích.');break;}
+        case 'copy-ai-prompt': {const text=$('#aiPrompt')?.value||'';if(!text){showToast('Hãy tạo câu lệnh trước.');break;}copyText(text);break;}
+        case 'open-chatgpt': window.open('https://chatgpt.com/','_blank','noopener,noreferrer');break;
+        case 'preview-ai': {try{aiPreview=parseAIResult($('#aiResult').value);$('#aiPreviewArea').innerHTML=renderAIPreview();showToast(`Đã kiểm tra ${aiPreview.plan.length} đề xuất hợp lệ.`);}catch(e){showToast(e.message||'Không đọc được kết quả AI.');}break;}
+        case 'apply-ai-plan': if(confirm('Áp dụng các ngày dự kiến và thời lượng trong đề xuất AI? Deadline gốc không thay đổi.'))applyAIPlan();break;
+        case 'discard-ai': aiPreview=null;$('#aiPreviewArea').innerHTML='<div class="empty"><strong>Đã bỏ đề xuất</strong><div>Bạn có thể nhập kết quả khác.</div></div>';break;
+        case 'export-data': exportData();break;
+        case 'choose-import': $('#importFile').click();break;
+        case 'reset-data': if(confirm('CẢNH BÁO: Xóa toàn bộ công việc, dự án, lịch và cài đặt trên trình duyệt này? Hãy xuất sao lưu trước.')){localStorage.removeItem(STORAGE_KEY);state=defaultState();saveState();setView('dashboard');showToast('Đã đặt lại dữ liệu trên thiết bị.');}break;
+        case 'focus-search': setView('tasks');setTimeout(()=>$('#taskSearch')?.focus(),80);break;
+      }
+    }
+    function copyText(text) {
+      if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(text).then(()=>showToast('Đã sao chép vào bộ nhớ tạm.')).catch(()=>fallbackCopy(text));
+      else fallbackCopy(text);
+    }
+    function fallbackCopy(text) {
+      const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');showToast('Đã sao chép vào bộ nhớ tạm.');}catch(e){showToast('Không thể sao chép tự động. Hãy chọn và sao chép nội dung.');}ta.remove();
+    }
+    document.addEventListener('click', e=>{
+      const viewEl=e.target.closest('[data-view]');
+      const actionEl=e.target.closest('[data-action]');
+      if(viewEl && !actionEl){setView(viewEl.dataset.view);return;}
+      if(actionEl){if(actionEl.dataset.view){setView(actionEl.dataset.view);return;}handleAction(actionEl.dataset.action,actionEl);return;}
+    });
+    document.addEventListener('submit', e=>{
+      if(e.target.id==='taskForm') {
+        e.preventDefault();const f=new FormData(e.target);const id=e.target.dataset.id;const old=id?taskById(id):null;
+        const task={...(old||{}),id:id||uid(),title:String(f.get('title')).trim(),description:String(f.get('description')||'').trim(),areaId:String(f.get('areaId')||state.areas[0]?.id),projectId:String(f.get('projectId')||'')||null,status:String(f.get('status')||'inbox'),priority:Number(f.get('priority')||3),dueDate:String(f.get('dueDate')||'')||null,plannedDate:String(f.get('plannedDate')||'')||null,estimate:Number(f.get('estimate')||0)||null,nextAction:String(f.get('nextAction')||'').trim(),blockedReason:String(f.get('blockedReason')||'').trim(),steps:old?.steps||[],createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+        if(task.status==='completed')task.completedAt=old?.completedAt||new Date().toISOString();else task.completedAt=null;
+        if(old){state.tasks=state.tasks.map(t=>t.id===id?task:t);logActivity('update_task',`Cập nhật công việc: ${task.title}`);}else{state.tasks.unshift(task);logActivity('create_task',`Tạo công việc: ${task.title}`);}
+        saveState();closeModal();render();showToast(old?'Đã cập nhật công việc.':'Đã thêm công việc.');
+      }
+      if(e.target.id==='projectForm') {
+        e.preventDefault();const f=new FormData(e.target);const id=e.target.dataset.id;const old=id?projectById(id):null;
+        const project={...(old||{}),id:id||uid(),title:String(f.get('title')).trim(),description:String(f.get('description')||'').trim(),areaId:String(f.get('areaId')||state.areas[0]?.id),status:String(f.get('status')||'active'),startDate:String(f.get('startDate')||'')||null,dueDate:String(f.get('dueDate')||'')||null,progressMode:old?.progressMode||'automatic',createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+        if(old)state.projects=state.projects.map(p=>p.id===id?project:p);else state.projects.unshift(project);
+        logActivity(old?'update_project':'create_project',`${old?'Cập nhật':'Tạo'} dự án: ${project.title}`);saveState();closeModal();render();showToast(old?'Đã cập nhật dự án.':'Đã tạo dự án.');
+      }
+      if(e.target.id==='eventForm') {
+        e.preventDefault();const f=new FormData(e.target);const event={id:uid(),title:String(f.get('title')).trim(),date:String(f.get('date')),type:String(f.get('type')),startTime:String(f.get('startTime')||''),endTime:String(f.get('endTime')||''),description:String(f.get('description')||'').trim(),createdAt:new Date().toISOString()};state.events.push(event);logActivity('create_event',`Thêm sự kiện: ${event.title}`);saveState();closeModal();selectedCalendarDate=event.date;currentMonth=new Date(`${event.date}T12:00:00`);setView('calendar');showToast('Đã thêm sự kiện.');
+      }
+      if(e.target.id==='profileForm') {
+        e.preventDefault();const f=new FormData(e.target);state.profile.name=String(f.get('name')).trim()||'Bạn';state.profile.workStart=String(f.get('workStart')||'08:00');state.profile.workEnd=String(f.get('workEnd')||'21:00');state.profile.dailyPriorityLimit=Number(f.get('dailyPriorityLimit')||3);saveState();render();showToast('Đã lưu hồ sơ cá nhân.');
+      }
+    });
+    document.addEventListener('input', e=>{
+      if(e.target.id==='taskSearch') {taskFilter.search=e.target.value;const pos=e.target.selectionStart;render();const next=$('#taskSearch');if(next){next.focus();next.setSelectionRange(pos,pos);}}
+    });
+    document.addEventListener('change', e=>{
+      if(e.target.id==='statusFilter'){taskFilter.status=e.target.value;render();}
+      if(e.target.id==='areaFilter'){taskFilter.area=e.target.value;render();}
+      if(e.target.id==='priorityFilter'){taskFilter.priority=e.target.value;render();}
+      if(e.target.id==='importFile'&&e.target.files?.[0]) {
+        const file=e.target.files[0];const reader=new FileReader();reader.onload=()=>{
+          try{const payload=JSON.parse(reader.result);const incoming=payload.data||payload;if(!incoming||incoming.version!==1||!Array.isArray(incoming.tasks)||!Array.isArray(incoming.areas)||!Array.isArray(incoming.projects))throw new Error('Cấu trúc file không đúng định dạng MY LIFE OS.');if(!confirm('Khôi phục sẽ thay thế dữ liệu hiện tại trên thiết bị này. Bạn đã xuất bản sao lưu dữ liệu hiện tại chưa?'))return;state=incoming;state.events||=[];state.activity||=[];state.profile||={name:'Bạn'};saveState();setView('dashboard');showToast('Đã khôi phục dữ liệu.');}catch(err){showToast(err.message||'Không đọc được file sao lưu.');}finally{e.target.value='';}
+        };reader.readAsText(file);
+      }
+    });
+    $('#modalBackdrop').addEventListener('click',e=>{if(e.target.id==='modalBackdrop')closeModal();});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();setView('tasks');setTimeout(()=>$('#taskSearch')?.focus(),80);}});
+    if(!localStorage.getItem(STORAGE_KEY)) saveState();
+    render();
+  })();
+  </script>
+</body>
+</html>
